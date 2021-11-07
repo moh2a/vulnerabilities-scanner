@@ -9,8 +9,6 @@
 import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import socket
-
 from PyQt5.QtCore import QThread
 import ipaddress
 from WorkerTest import WorkerTest
@@ -73,15 +71,15 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addWidget(self.ipInput, 3, 1, 1, 3)
         self.verticalLayout.addLayout(self.gridLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
-
+        self.cancelButton.setEnabled(False)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def startTest(self):
         try:
-            print("checkbox :"+str(self.checkBox_BF.checkState()))
+            print("checkbox :" + str(self.checkBox_BF.checkState()))
             ipaddress.IPv4Network(self.ipInput.text())
-            #socket.inet_aton(self.ipInput.text())
+            # socket.inet_aton(self.ipInput.text())
             self.thread = QThread()
             # Step 3: Create a worker object
             self.worker = WorkerTest(
@@ -105,11 +103,14 @@ class Ui_MainWindow(object):
             self.progressBar.setProperty("value", 0)
             self.progressBar.setMaximum(100)
             self.testButton.setEnabled(False)
+            self.cancelButton.setEnabled(True)
             self.thread.finished.connect(
                 lambda: self.testButton.setEnabled(True)
             )
             self.thread.finished.connect(
                 lambda: self.progressBar.setProperty("value", 100))
+            self.thread.finished.connect(
+                lambda: self.cancelButton.setEnabled(False))
         except ValueError:
             self.addText("L'adresse IP entrée est au mauvais format ou est absente : " + self.ipInput.text(), "alert")
             self.addText("Veuillez saisir une adresse IP au format suivant : XXX.XXX.XXX.XXX ", "black")
