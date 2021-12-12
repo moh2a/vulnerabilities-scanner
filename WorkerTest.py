@@ -3,6 +3,7 @@ import queue
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 import socket
 
+from ListPages import ListPages
 from PingTest import PingTest
 
 
@@ -10,9 +11,10 @@ class WorkerTest(QObject):
     finished = pyqtSignal()
     addText = pyqtSignal(str, str)
 
-    def __init__(self, ip, ddos, xss, sqli, BF, parent=None):
+    def __init__(self, ip,port, ddos, xss, sqli, BF, parent=None):
         QThread.__init__(self, parent)
         self.ip = ip
+        self.port = port
         self.xss = xss
         self.sqli = sqli
         self.BF = BF
@@ -35,7 +37,18 @@ class WorkerTest(QObject):
             self.addText.emit("Echoué.", "alert")
 
         self.addText.emit("Fin du test.", "info")
-        """Long-running task."""
+
+        # lancement de la tache de listing des pages :
+
+        self.addText.emit("Début du listing des pages.", "info")
+        self.addText.emit("Listing sur : " + self.ip+":"+self.port, "info")
+        resultPing = False
+        self.ListPages = ListPages(self.ip, self.port)
+        self.ListPages.start()
+        pagesTable = self.ListPages.join()
+        self.addText.emit("Pages trouvées : \n", "success")
+        for pages in pagesTable:
+            self.addText.emit(pages+"\n", "info")
         if self.ddos:
             self.addText.emit("Test DDOS indisponible pour le moment.", "alert")
         if self.xss:
