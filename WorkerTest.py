@@ -1,8 +1,4 @@
-import queue
-
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
-import socket
-
 from Ddos import Ddos
 from ListPages import ListPages
 from PingTest import PingTest
@@ -69,5 +65,3 @@ class WorkerTest(QObject):
 
     def quit(self):
         print("ici")
-        # self.Ping.
-# 8.8.8.8

