@@ -3,6 +3,7 @@ import queue
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 import socket
 
+from Ddos import Ddos
 from ListPages import ListPages
 from PingTest import PingTest
 
@@ -48,15 +49,22 @@ class WorkerTest(QObject):
         pagesTable = self.ListPages.join()
         self.addText.emit("Pages trouvées : \n", "success")
         for pages in pagesTable:
-            self.addText.emit(pages+"\n", "info")
-        if self.ddos:
-            self.addText.emit("Test DDOS indisponible pour le moment.", "alert")
+            self.addText.emit(pages+"\n", "black")
         if self.xss:
             self.addText.emit("Test xss indisponible pour le moment.", "alert")
         if self.sqli:
             self.addText.emit("Test sqli indisponible pour le moment.", "alert")
         if self.BF:
             self.addText.emit("Test BF indisponible pour le moment.", "alert")
+        if self.ddos:
+            self.addText.emit("Début du Ddos.", "info")
+            self.addText.emit("Ddos sur : " + self.ip + ":" + self.port, "info")
+            errorMax = 5 #au bout de 100 erreurs, le DDOS est réussi
+            self.Ddos = Ddos(self.ip, self.port, errorMax)
+            self.Ddos.start()
+            ddosResult = self.Ddos.join()
+            if(ddosResult): self.addText.emit("Ddos réussi.", "success")
+            else : self.addText.emit("Ddos echoué.", "alert")
         self.finished.emit()
 
     def quit(self):
