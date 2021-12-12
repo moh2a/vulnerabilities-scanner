@@ -10,10 +10,15 @@ class ListPages(Thread):
         self.port = port
 
     def run(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+        options.add_argument('window-size=1920x1080')
+        options.add_argument("disable-gpu")
+        # OR options.add_argument("--disable-gpu")
         url = "http://" + self.ip + ":" + self.port
-        driver = webdriver.Chrome()
+        driver = webdriver.Chrome(chrome_options=options)
         driver.get(url)
-        delay = 5  # seconds
+        delay = 3  # seconds
         driver.implicitly_wait(delay)
         url = driver.current_url
         linktable = []

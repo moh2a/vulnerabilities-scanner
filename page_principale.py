@@ -16,12 +16,6 @@ from WorkerTest import WorkerTest
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        self.textColor = {}
-        self.textColor["end"] = "</font><br>"
-        self.textColor["alert"] = "<font color=#B73B15>"
-        self.textColor["info"] = "<font color=#1595B7>"
-        self.textColor["black"] = "<font color=#000>"
-        self.textColor["success"] = "<font color=#43B715>"
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(554, 348)
         MainWindow.setToolTip("")
@@ -32,7 +26,6 @@ class Ui_MainWindow(object):
         self.gridLayout_2 = QtWidgets.QGridLayout()
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
-        self.progressBar.setProperty("value", 24)
         self.progressBar.setObjectName("progressBar")
         self.gridLayout_2.addWidget(self.progressBar, 1, 0, 1, 5)
         self.displayOutput = QtWidgets.QTextBrowser(self.centralwidget)
@@ -84,7 +77,14 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.cancelButton.setEnabled(False)
         self.cancelButton.clicked.connect(self.cancel)
+        self.ipInput.setProperty("text", "192.168.1.2")
         self.testButton.clicked.connect(self.startTest)
+        self.textColor = {}
+        self.textColor["end"] = "</font><br>"
+        self.textColor["alert"] = "<font color=#B73B15>"
+        self.textColor["info"] = "<font color=#1595B7>"
+        self.textColor["black"] = "<font color=#000>"
+        self.textColor["success"] = "<font color=#43B715>"
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
