@@ -4,7 +4,11 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
+<<<<<<< HEAD
     <orderEntry type="jdk" jdkName="Python 3.10 (Projet)" jdkType="Python SDK" />
+=======
+    <orderEntry type="jdk" jdkName="Python 3.9 (vulnerabilities-scanner)" jdkType="Python SDK" />
+>>>>>>> 57da735957bb0e50b4e081faca117978450183e4
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
