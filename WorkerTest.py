@@ -1,8 +1,6 @@
-import queue
-
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
-import socket
-
+from Ddos import Ddos
+from ListPages import ListPages
 from PingTest import PingTest
 
 
@@ -10,9 +8,10 @@ class WorkerTest(QObject):
     finished = pyqtSignal()
     addText = pyqtSignal(str, str)
 
-    def __init__(self, ip, ddos, xss, sqli, BF, parent=None):
+    def __init__(self, ip,port, ddos, xss, sqli, BF, parent=None):
         QThread.__init__(self, parent)
         self.ip = ip
+        self.port = port
         self.xss = xss
         self.sqli = sqli
         self.BF = BF
@@ -35,18 +34,34 @@ class WorkerTest(QObject):
             self.addText.emit("Echoué.", "alert")
 
         self.addText.emit("Fin du test.", "info")
-        """Long-running task."""
-        if self.ddos:
-            self.addText.emit("Test DDOS indisponible pour le moment.", "alert")
+
+        # lancement de la tache de listing des pages :
+
+        self.addText.emit("Début du listing des pages.", "info")
+        self.addText.emit("Listing sur : " + self.ip+":"+self.port, "info")
+        resultPing = False
+        self.ListPages = ListPages(self.ip, self.port)
+        self.ListPages.start()
+        pagesTable = self.ListPages.join()
+        self.addText.emit("Pages trouvées : \n", "success")
+        for pages in pagesTable:
+            self.addText.emit(pages+"\n", "black")
         if self.xss:
             self.addText.emit("Test xss indisponible pour le moment.", "alert")
         if self.sqli:
             self.addText.emit("Test sqli indisponible pour le moment.", "alert")
         if self.BF:
             self.addText.emit("Test BF indisponible pour le moment.", "alert")
+        if self.ddos:
+            self.addText.emit("Début du Ddos.", "info")
+            self.addText.emit("Ddos sur : " + self.ip + ":" + self.port, "info")
+            errorMax = 5 #au bout de 100 erreurs, le DDOS est réussi
+            self.Ddos = Ddos(self.ip, self.port, errorMax)
+            self.Ddos.start()
+            ddosResult = self.Ddos.join()
+            if(ddosResult): self.addText.emit("Ddos réussi.", "success")
+            else : self.addText.emit("Ddos echoué.", "alert")
         self.finished.emit()
 
     def quit(self):
         print("ici")
-        # self.Ping.
-# 8.8.8.8
