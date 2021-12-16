@@ -14,7 +14,7 @@ class ListPages(Thread):
         options.add_argument('window-size=1920x1080')
         options.add_argument("disable-gpu")
         urlBase = "http://" + self.ip + ":" + self.port
-        driver = webdriver.Chrome(chrome_options=options)
+        driver = webdriver.Chrome(chrome_options=options, executable_path=r'chromedriver.exe')
         driver.get(urlBase)
         delay = 3 # seconds
         driver.implicitly_wait(delay)
