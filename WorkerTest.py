@@ -2,6 +2,7 @@ from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from Ddos import Ddos
 from ListPages import ListPages
 from PingTest import PingTest
+from XSSTest import XSSTest
 
 
 class WorkerTest(QObject):
@@ -47,7 +48,12 @@ class WorkerTest(QObject):
         for pages in pagesTable:
             self.addText.emit(pages+"\n", "black")
         if self.xss:
-            self.addText.emit("Test xss indisponible pour le moment.", "alert")
+            print('laaaaaaaa')
+            self.addText.emit("Début du XSS.", "info")
+            self.addText.emit("XSS sur : " + self.ip + ":" + self.port, "info")
+            self.xSSTest = XSSTest(pagesTable)
+            self.xSSTest.start()
+            test = self.xSSTest.join()
         if self.sqli:
             self.addText.emit("Test sqli indisponible pour le moment.", "alert")
         if self.BF:

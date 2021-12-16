@@ -31,6 +31,7 @@ class ListPages(Thread):
             for button in driver.find_elements(By.TAG_NAME, 'a'):
                 link = button.get_attribute('href')
                 if (link and (link != "None")):
+
                     if link not in self.finaltable:
                         linktable.append(link)
             linktable = list(dict.fromkeys(linktable))
