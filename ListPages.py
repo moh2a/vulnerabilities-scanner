@@ -13,28 +13,32 @@ class ListPages(Thread):
         options.add_argument('headless')
         options.add_argument('window-size=1920x1080')
         options.add_argument("disable-gpu")
-        url = "http://" + self.ip + ":" + self.port
+        urlBase = "http://" + self.ip + ":" + self.port
         driver = webdriver.Chrome(chrome_options=options)
-        driver.get(url)
-        delay = 3  # seconds
+        driver.get(urlBase)
+        delay = 3 # seconds
         driver.implicitly_wait(delay)
         url = driver.current_url
         linktable = []
+        linktable_ = []
+        self.finaltable = []
         linktable.append(url)
-
-        for link in linktable:
-            for button in driver.find_elements(By.TAG_NAME, 'button'):
-                link = button.get_attribute('routerlink')
-                if (link and (link != "None")): linktable.append(url + link[1:])
+        i=0
+        while linktable:
+            i+=1
+            url = linktable.pop()
+            self.finaltable.append(url)
+            driver.get(url)
+            #driver.implicitly_wait(delay)
             for button in driver.find_elements(By.TAG_NAME, 'a'):
                 link = button.get_attribute('href')
-                if (link and (link != "None")): linktable.append(link)
+                if (link and (link != "None")):
+                    if urlBase in url:
+                        if link not in self.finaltable:
+                            linktable.append(link)
             linktable = list(dict.fromkeys(linktable))
 
         driver.quit()
-        self.finaltable = []
-        for link in linktable:
-            if (url in link): self.finaltable.append(link)
         print("tableau : ")
         for link in self.finaltable:
             print(link + "\n")
