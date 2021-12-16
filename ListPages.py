@@ -23,9 +23,7 @@ class ListPages(Thread):
         linktable_ = []
         self.finaltable = []
         linktable.append(url)
-        i=0
         while linktable:
-            i+=1
             url = linktable.pop()
             self.finaltable.append(url)
             driver.get(url)
@@ -33,9 +31,8 @@ class ListPages(Thread):
             for button in driver.find_elements(By.TAG_NAME, 'a'):
                 link = button.get_attribute('href')
                 if (link and (link != "None")):
-                    if urlBase in url:
-                        if link not in self.finaltable:
-                            linktable.append(link)
+                    if link not in self.finaltable:
+                        linktable.append(link)
             linktable = list(dict.fromkeys(linktable))
 
         driver.quit()
