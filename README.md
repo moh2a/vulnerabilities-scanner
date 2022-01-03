@@ -1,7 +1,7 @@
 # vulnerabilities-scanner
 ##### An automatic tool that scan vulnerabilities of a server/web server
 
-- **Please install chrome before**
+- <span style="color:red;">Please install chrome before</span>
 - Start page_principale.py
 
 ##### Vulnerabilities that can be scanned : 
