@@ -17,7 +17,7 @@ from WorkerTest import WorkerTest
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(554, 348)
+        MainWindow.resize(1280, 720)
         MainWindow.setToolTip("")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -67,9 +67,9 @@ class Ui_MainWindow(object):
         self.checkBoxSQLi = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBoxSQLi.setObjectName("checkBoxSQLi")
         self.gridLayout_2.addWidget(self.checkBoxSQLi, 2, 3, 1, 1)
-        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox.setObjectName("checkBox")
-        self.gridLayout_2.addWidget(self.checkBox, 2, 4, 1, 1)
+        self.checkBoxXXEi = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBoxXXEi.setObjectName("checkBoxXXEi")
+        self.gridLayout_2.addWidget(self.checkBoxXXEi, 2, 4, 1, 1)
         self.checkBoxBF = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBoxBF.setObjectName("checkBoxBF")
         self.gridLayout_2.addWidget(self.checkBoxBF, 2, 2, 1, 1)
@@ -101,6 +101,7 @@ class Ui_MainWindow(object):
                 ddos=self.checkBoxDDOS.checkState(),
                 xss=self.checkBoxXSS.checkState(),
                 BF=self.checkBoxBF.checkState(),
+                XXE=self.checkBoxXXEi.checkState(),
                 sqli=self.checkBoxSQLi.checkState())
             # Step 4: Move worker to the thread
             self.worker.moveToThread(self.thread)
@@ -146,7 +147,7 @@ class Ui_MainWindow(object):
         self.checkBoxDDOS.setText(_translate("MainWindow", "Dos/Ddos"))
         self.labelPort.setText(_translate("MainWindow", "Port : "))
         self.checkBoxSQLi.setText(_translate("MainWindow", "SQLi"))
-        self.checkBox.setText(_translate("MainWindow", "CheckBox"))
+        self.checkBoxXXEi.setText(_translate("MainWindow", "XXEi"))
         self.checkBoxBF.setText(_translate("MainWindow", "Brut force"))
 
 
