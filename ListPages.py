@@ -1,5 +1,7 @@
 from threading import Thread
 from selenium import webdriver
+from bs4 import BeautifulSoup
+import requests
 from selenium.webdriver.common.by import By
 
 class ListPages(Thread):
@@ -23,18 +25,25 @@ class ListPages(Thread):
         linktable_ = []
         self.finaltable = []
         linktable.append(url)
+        response = requests.Session()
         while linktable:
+            #172.20.10.2
             url = linktable.pop()
             self.finaltable.append(url)
+            print("icii",url)
+            #page=BeautifulSoup(response.get(url).content, "html.parser")
             driver.get(url)
             #driver.implicitly_wait(delay)
             for button in driver.find_elements(By.TAG_NAME, 'a'):
+            #for button in page.find_all('a'):
                 link = button.get_attribute('href')
+                #link = button.get('href')
+                #link =url+ link
                 if (link and (link != "None")):
-
                     if link not in self.finaltable:
                         linktable.append(link)
-            linktable = list(dict.fromkeys(linktable))
+            linktable=list(dict.fromkeys(linktable))
+            print("fin", linktable)
 
         driver.quit()
         print("tableau : ")
