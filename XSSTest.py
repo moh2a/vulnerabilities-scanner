@@ -7,11 +7,14 @@ class XSSTest(Thread):
     def __init__(self, pageList):
         Thread.__init__(self)
         self.pageList = pageList
+        self.vulnerablepages = []
 
     def run(self):
         for url in self.pageList:
             print(self.xss_vulnerability_testing(url))
-
+    def join(self):
+        Thread.join(self)
+        return self.vulnerablepages
 
     def get_all_forms_from_page(self, url):
         # BeautifulSoup is a Python library for pulling data out of HTML and XML files, it works with a parser.
@@ -83,8 +86,9 @@ class XSSTest(Thread):
                 if script in response_content:
                     print(f"An XSS vulnerability was detected on this url : {url}")
                     print(f"Here is the vulnerable form: {form_details}")
+
+                    print("page : ", url)
+                    self.vulnerablepages.append(url)
                     return "XSS detected !"
         return "No XSS detected"
 
-    def join(self):
-        Thread.join(self)
