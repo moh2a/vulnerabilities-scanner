@@ -1,10 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-from pprint import pprint
 from threading import Thread
 
-# initialize an HTTP session & set the browser
+# Initiation de la session HTTP
 response = requests.Session()
 
 class sqliAttackTest(Thread):
@@ -18,105 +17,137 @@ class sqliAttackTest(Thread):
         return self.vulnerablepages
     def run(self):
         for link in self.pageList:
-            self.test_sql_injection(link)
+            self.try_sql_injection(link)
 
     def get_soup(self,url):
-        """"""
+        """
+        Cette fonction nous permet d'obtenir le contenu qui se trouve dans un URL
+        grâce notamment à la librairie BeautifuSoup
+        :param: L’URL dont on veut avoir le contenu
+        :return: Tout le contenu de l'URL grâce à la librairie BeautifulSoup
+        """
         return BeautifulSoup(response.get(url).content, "html.parser")
 
     def get_all_forms(self,url):
-        """On lui rentre un lien et ça nous resort tous les formulaire qui existe sur la page web"""
+        """
+        Cette fonction nous resort tous les formulaire qui existe sur la page web
+        :param: L’URL dont on veut avoir tous les formulaires
+        :return: Tous les formulaires de l'URL en param
+        """
         return self.get_soup(url).find_all("form")
 
 
-    def get_form_details(self,form):
+    def get_informations_form(self,form):
         """
-        This function extracts all possible useful information about an HTML `form`
+        Cette fonction nous permet d'extraire toutes les informations
+        possibles et utiles sur un `formulaire` HTML
+        :param: On lui donne un formulaire en paramètre (form)
+        :return: La fonction nous retourne une liste avec les actions,
+        méthodes et inputs d'une balise form
         """
-        details = {}
-        # get the form action (target url)
+        informationForm = {}
+        # On va récupérer l'action du formulaire en param
         try:
             action = form.attrs.get("action").lower()
         except:
             action = None
-        # get the form method (POST, GET, etc.)
+        # On va récupérer la méthode du formulaire en param
         method = form.attrs.get("method", "get").lower()
-        # get all the input details such as type and name
+        # On va récupérer les inputs du formulaire en param
         inputs = []
-        for input_tag in form.find_all("input"):
-            input_type = input_tag.attrs.get("type", "text")
-            input_name = input_tag.attrs.get("name")
-            input_value = input_tag.attrs.get("value", "")
-            inputs.append({"type": input_type, "name": input_name, "value": input_value})
+        for input in form.find_all("input"):
+            type = input.attrs.get("type", "text")
+            name = input.attrs.get("name")
+            value = input.attrs.get("value", "")
+            inputs.append({"type": type, "name": name, "value": value})
         # put everything to the resulting dictionary
-        details["action"] = action
-        details["method"] = method
-        details["inputs"] = inputs
-        return details
+        informationForm["action"] = action
+        informationForm["method"] = method
+        informationForm["inputs"] = inputs
+        return informationForm
 
-    def is_vulnerable(self,response):
-        """A simple boolean function that determines whether a page
-        is SQL Injection vulnerable from its `response`"""
+    def test_vulnerable(self,response):
+        """
+        Cette fonction booléenne permet de détermine si
+        une page est vulnérable à une injection SQL à partir de sa "réponse".
+        :param: On entre la réponse (response) lors de l'essai de l'injection SQL
+        :return: Le booléen
+        """
         errors = {
             # MySQL
             "you have an error in your sql syntax;",
+            "mysqli",
             "warning: mysql",
             # SQL Server
             "unclosed quotation mark after the character string",
             # Oracle
             "quoted string not properly terminated",
-            #
-            "mysqli",
+            # PostgreSQL
+            "PostgreSQL",
         }
         for error in errors:
-            # if you find one of these errors, return True
+            # Si on trouve l'une de ces erreurs (bien sur il y'en a beaucoup d'autres,
+            # mais pour eviter de faire un trop gros code, alors on a choisi de vous en mettre
+            # que quelques unes), ça retourne "True"
             if error in response.content.decode().lower():
                 return True
-        # no error detected
+        # Sinon ça retourne false (il n'y a pas eu d'erreurs détectées)
         return False
 
-    def test_sql_injection(self,url):
-        # test on URL
-        for c in "\"'":
-            # add quote/double quote character to the URL
-            new_url = url + c
-            print("[!] Trying", new_url)
-            # make the HTTP request
-            res = response.get(new_url)
-            if self.is_vulnerable(res):
-                # SQL Injection detected on the URL itself,
-                # no need to preceed for extracting forms and submitting them
-                print("[+] SQL Injection vulnerability detected, link:", new_url)
+    def try_sql_injection(self,url):
+        # On test l'injection SQL sur l'URL
+        for injection in "\"'":
+            # On ajoute une apostrophe/apostrophe double à l'URL
+            new_url = url + injection
+            print("*** Test sur : ", new_url, " ***")
+            # On fait une requête HTTP avec le nouveau lien
+            resp = response.get(new_url)
+            if self.test_vulnerable(resp):
+                # Si on rentre dans cette condition, cela veut dire que
+                # c'est vulnérable à une injection SQL,
+                # On a donc pas besoin d'extraire tous les formulaires et de faire le test sur eux
+                print("")
+                print("!!!!!!! Une vulnérabilité à été détectée de type injection SQL, voici le lien :")
+                print("-->", new_url)
+                print("")
                 return
-        # test on HTML forms
+        # On test l'injection SQL sur les formulaires
         forms = self.get_all_forms(url)
-        print(f"[+] Detected {len(forms)} forms on {url}.")
+        print("*** Nous avons detecté ", len(forms), " formulaire dans cet URL : ", url)
         for form in forms:
-            form_details = self.get_form_details(form)
-            for c in "\"'":
-                # the data body we want to submit
+            form_informations = self.get_informations_form(form)
+            for injection in "\"'":
+                # On prépare la requête avec les données (dans le body) que nous voulons envoyer
                 data = {}
-                for input_tag in form_details["inputs"]:
-                    if input_tag["type"] == "hidden" or input_tag["value"]:
-                        # any input form that is hidden or has some value,
-                        # just use it in the form body
+                for input in form_informations["inputs"]:
+                    if input["type"] == "hidden" or input["value"]:
+                        # Quand un formulaire est caché ou bien à une certaine valeur,
+                        # alors il suffit simplement de l'utiliser dans le body du formulaire
                         try:
-                            data[input_tag["name"]] = input_tag["value"] + c
+                            data[input["name"]] = input["value"] + injection
                         except:
                             pass
-                    elif input_tag["type"] != "submit":
-                        # all others except submit, use some junk data with special character
-                        data[input_tag["name"]] = f"test{c}"
-                # join the url with the action (form request URL)
-                url = urljoin(url, form_details["action"])
-                if form_details["method"] == "post":
-                    res = response.post(url, data=data)
-                elif form_details["method"] == "get":
-                    res = response.get(url, params=data)
-                # test whether the resulting page is vulnerable
-                if self.is_vulnerable(res):
-                    print("[+] SQL Injection vulnerability detected, link:", url)
-                    print("[+] Form:")
-                    pprint(form_details)
+                    elif input["type"] != "submit":
+                        # On ajoute un caractère spécial à la fin de la donnée inutile
+                        # sauf pour le submit
+                        data[input["name"]] = "donnéeInutile" + injection
+                # On join l'URL à l'action
+                url = urljoin(url, form_informations["action"])
+                if form_informations["method"] == "post":
+                    resp = response.post(url, data=data)
+                elif form_informations["method"] == "get":
+                    resp = response.get(url, params=data)
+                # On test maintenant si la page est vulnérable avec le formulaire
+                if self.test_vulnerable(resp):
+                    print("")
+                    print("!!!!!!! Une vulnérabilité à été détectée de type injection SQL, voici le lien :")
+                    print("-->", url)
+                    print("--> Et voici le formulaire :")
+                    print("Action : " ,form_informations["action"])
+                    print("Methode : ", form_informations["method"])
+                    print("Inputs :")
+                    for input in form_informations["inputs"]:
+                        print("       ",input)
+                    print("")
                     self.vulnerablepages.append(url)
                     break
