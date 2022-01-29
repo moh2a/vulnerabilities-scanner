@@ -100,9 +100,9 @@ class Ui_MainWindow(object):
                 port=self.portInput.text(),
                 ddos=self.checkBoxDDOS.checkState(),
                 xss=self.checkBoxXSS.checkState(),
+                sqli=self.checkBoxSQLi.checkState(),
                 BF=self.checkBoxBF.checkState(),
-                XXE=self.checkBoxXXEi.checkState(),
-                sqli=self.checkBoxSQLi.checkState())
+                XXE=self.checkBoxXXEi.checkState())
             # Step 4: Move worker to the thread
             self.worker.moveToThread(self.thread)
             # Step 5: Connect signals and slots

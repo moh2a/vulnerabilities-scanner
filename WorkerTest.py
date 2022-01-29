@@ -9,18 +9,18 @@ class WorkerTest(QObject):
     finished = pyqtSignal()
     addText = pyqtSignal(str, str)
 
-    def __init__(self, ip,port, ddos, xss, sqli, BF, parent=None):
+    def __init__(self, ip,port, ddos, xss, sqli, BF,XXE, parent=None):
         QThread.__init__(self, parent)
         self.ip = ip
         self.port = port
         self.xss = xss
         self.sqli = sqli
         self.BF = BF
+        self.XXE = XXE
         self.ddos = ddos
 
     def run(self):
         self.addText.emit("Début du test.", "info")
-
         self.addText.emit("Adresse IP entrée : " + self.ip, "info")
         self.addText.emit("Ping : ", "black")
         resultPing = False
