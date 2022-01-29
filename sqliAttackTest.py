@@ -11,7 +11,11 @@ class sqliAttackTest(Thread):
     def __init__(self, pageList):
         Thread.__init__(self)
         self.pageList = pageList
+        self.vulnerablepages = []
 
+    def join(self):
+        Thread.join(self)
+        return self.vulnerablepages
     def run(self):
         for link in self.pageList:
             self.test_sql_injection(link)
@@ -114,4 +118,5 @@ class sqliAttackTest(Thread):
                     print("[+] SQL Injection vulnerability detected, link:", url)
                     print("[+] Form:")
                     pprint(form_details)
+                    self.vulnerablepages.append(url)
                     break

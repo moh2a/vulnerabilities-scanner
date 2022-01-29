@@ -55,11 +55,18 @@ class WorkerTest(QObject):
             test = self.xSSTest.join()
         if self.sqli:
             print('Younes')
-            self.addText.emit("Début du XSS.", "info")
-            self.addText.emit("XSS sur : " + self.ip + ":" + self.port, "info")
+            self.addText.emit("Début du SQLi.", "black")
+            self.addText.emit("SQLi sur : " + self.ip + ":" + self.port, "info")
             self.sqliAttackTest_ = sqliAttackTest(pagesTable)
             self.sqliAttackTest_.start()
-            test = self.sqliAttackTest_.join()
+            resultsqli = self.sqliAttackTest_.join()
+            if len(resultsqli)>0:
+                self.addText.emit("L'attaque SQL injection a réussi", "success")
+                self.addText.emit("Page(s) vulnérables : ", "info")
+                for pages in resultsqli:
+                    self.addText.emit(pages + "\n", "black")
+            else: self.addText.emit("L'attaque SQL injection a échouée. Aucune vulnérabilité rencontrée", "alert")
+            print(resultsqli)
         if self.BF:
             self.addText.emit("Test BF indisponible pour le moment.", "alert")
         if self.ddos:
