@@ -16,9 +16,7 @@ class PingTest(Thread):
             self.resultPing = True
 
         else:
-            self.resultPing = False
-        #self.queue.put(True)
-        #return self.resultPing
+            self.resultPing = Falses
 
     def join(self):
         Thread.join(self)

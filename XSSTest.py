@@ -84,8 +84,8 @@ class XSSTest(Thread):
             else:
                 response_content = response.content.decode()
                 if script in response_content:
-                    print(f"An XSS vulnerability was detected on this url : {url}")
-                    print(f"Here is the vulnerable form: {form_details}")
+                    print("An XSS vulnerability was detected on this url : {url}")
+                    print("Here is the vulnerable form: {form_details}")
 
                     print("page : ", url)
                     self.vulnerablepages.append(url)

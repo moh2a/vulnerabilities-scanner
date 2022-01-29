@@ -11,9 +11,6 @@ class Ddos(Thread):
         self.ip = ip
         self.port = int(port)
 
-    def countError(self):
-        self.errorsCount += 1
-
     def run(self):
         self.stop_threads = True
         i = 0
