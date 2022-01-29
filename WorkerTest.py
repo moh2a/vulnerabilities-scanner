@@ -59,7 +59,6 @@ class WorkerTest(QObject):
             else:
                 self.addText.emit("L'attaque XSS a échouée. Aucune vulnérabilité rencontrée", "alert")
         if self.sqli:
-            print('Younes')
             self.addText.emit("Début du SQLi.", "black")
             self.addText.emit("SQLi sur : " + self.ip + ":" + self.port, "info")
             self.sqliAttackTest_ = sqliAttackTest(pagesTable)
