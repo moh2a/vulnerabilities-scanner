@@ -48,7 +48,6 @@ class WorkerTest(QObject):
         for pages in pagesTable:
             self.addText.emit(pages+"\n", "black")
         if self.xss:
-            print('laaaaaaaa')
             self.addText.emit("Début du XSS.", "info")
             self.addText.emit("XSS sur : " + self.ip + ":" + self.port, "info")
             self.xSSTest = XSSTest(pagesTable)
@@ -70,8 +69,13 @@ class WorkerTest(QObject):
             self.Ddos = Ddos(self.ip, self.port, errorMax)
             self.Ddos.start()
             ddosResult = self.Ddos.join()
-            if(ddosResult): self.addText.emit("Ddos réussi.", "success")
-            else : self.addText.emit("Ddos echoué.", "alert")
+            print("result : ", ddosResult["result"])
+            if(ddosResult["result"] == "True"):
+                self.addText.emit("Ddos réussi.", "success")
+            else: self.addText.emit("Ddos echoué.", "alert")
+            mess= "Nombre de threads utilisés : " + str(ddosResult['threads'])
+            print("message : ", mess)
+            self.addText.emit(mess, "info")
         self.finished.emit()
 
     def quit(self):
