@@ -1,5 +1,8 @@
 password
+password123
+changeme
 azerty
 admin123
-dragon
-.bleach1234
+ISEP
+Racim
+
