@@ -21,7 +21,7 @@ class sqliAttackTest(Thread):
 
     def get_soup(self,url):
         """
-        Cette fonction nous permet d'obtenir le contenu qui se trouve dans un URL
+        Cette fonction nous permet d'obtenir le contenu qui se trouve dans une URL
         grâce notamment à la librairie BeautifuSoup
         :param: L’URL dont on veut avoir le contenu
         :return: Tout le contenu de l'URL grâce à la librairie BeautifulSoup
@@ -78,8 +78,6 @@ class sqliAttackTest(Thread):
             "you have an error in your sql syntax;",
             "mysqli",
             "warning: mysql",
-            # SQL Server
-            "unclosed quotation mark after the character string",
             # Oracle
             "quoted string not properly terminated",
             # PostgreSQL
