@@ -3,6 +3,7 @@ from Ddos import Ddos
 from ListPages import ListPages
 from PingTest import PingTest
 from XSSTest import XSSTest
+from BFTest import BFTest
 from sqliAttackTest import sqliAttackTest
 
 class WorkerTest(QObject):
@@ -75,7 +76,19 @@ class WorkerTest(QObject):
                 print("Voici la liste des liens vulnérables : ", resultsqli)
             else: self.addText.emit("L'attaque SQL injection a échouée. Aucune vulnérabilité rencontrée", "alert")
         if self.BF:
-            self.addText.emit("Test BF indisponible pour le moment.", "alert")
+            self.addText.emit("Début de la force brute.", "info")
+            self.addText.emit("Force brute sur : " + self.ip + ":" + self.port, "info")
+            self.BFtest = BFTest(pagesTable)
+            self.BFtest.start()
+            resultbf = self.BFtest.join()
+            print("la", resultbf)
+            if resultbf and (len(resultbf) > 0):
+                self.addText.emit("L'attaque BF a réussi", "success")
+                self.addText.emit("Utilisateur(s) et mot(s) de passe vulnérables : ", "info")
+                for pages in resultbf:
+                    self.addText.emit(pages + "\n", "black")
+            else:
+                self.addText.emit("L'attaque de force brute a échouée. Aucune vulnérabilité rencontrée", "alert")
         if self.ddos:
             self.addText.emit("Début du Ddos.", "info")
             self.addText.emit("Ddos sur : " + self.ip + ":" + self.port, "info")

