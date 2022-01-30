@@ -110,6 +110,7 @@ class sqliAttackTest(Thread):
                 print("!!!!!!! Une vulnérabilité à été détectée de type injection SQL, voici le lien :")
                 print("-->", new_url)
                 print("")
+                self.vulnerablepages.append(url)
                 return
         # On test l'injection SQL sur les formulaires
         forms = self.get_all_forms(url)
